@@ -17,6 +17,24 @@ LLMs are next-token predictors: at every design decision, they pick the token mo
 │   └── generate_seed.sh              # Generates a random alphanumeric seed string
 ├── references/
 │   └── critic-prompt.md              # Reusable design-critic subagent prompt
+├── .github/prompts/                   # Copilot slash commands
+│   ├── design-discover.prompt.md
+│   ├── design-build.prompt.md
+│   ├── design-critique.prompt.md
+│   ├── design-subtract.prompt.md
+│   ├── design-audit.prompt.md
+│   ├── design-iterate.prompt.md
+│   ├── design-moodboard.prompt.md
+│   └── design-responsive.prompt.md
+├── .claude/commands/                  # Claude Code slash commands
+│   ├── design-discover.md
+│   ├── design-build.md
+│   ├── design-critique.md
+│   ├── design-subtract.md
+│   ├── design-audit.md
+│   ├── design-iterate.md
+│   ├── design-moodboard.md
+│   └── design-responsive.md
 └── LICENSE                            # MIT license for this repository
 ```
 
@@ -67,9 +85,39 @@ Install the repository as a workspace skill:
 ```bash
 mkdir -p /path/to/your-project/.github/skills/anti-slop-design
 cp -R SKILL.md scripts references /path/to/your-project/.github/skills/anti-slop-design/
+mkdir -p /path/to/your-project/.github/prompts
+cp .github/prompts/*.prompt.md /path/to/your-project/.github/prompts/
 ```
 
 Restart or reload VS Code after installation. Copilot discovers the skill from its `SKILL.md` description and loads it for relevant UI and design requests.
+
+For Claude Code, install the shared skill and native command files:
+
+```bash
+mkdir -p /path/to/your-project/.claude/skills/anti-slop-design
+cp -R SKILL.md scripts references /path/to/your-project/.claude/skills/anti-slop-design/
+mkdir -p /path/to/your-project/.claude/commands
+cp .claude/commands/*.md /path/to/your-project/.claude/commands/
+```
+
+Restart Claude Code after creating `.claude/commands/`. Claude Code loads the skill automatically when relevant, and each command accepts its target and constraints as trailing text, for example `/design-audit dashboard`.
+
+### Slash commands
+
+Type `/` in Copilot Chat or Claude Code and select one of these focused workflows:
+
+| Command | Purpose | External input |
+|---|---|---|
+| `/design-discover` | Produce three distinct creative directions | Optional references or constraints |
+| `/design-moodboard` | Turn references or a named aesthetic into a build brief | Optional; can start from a product description |
+| `/design-build` | Implement one approved direction | Direction or target description |
+| `/design-critique` | Identify the largest visual quality gap | Rendered page or screenshot; references optional |
+| `/design-audit` | Score the current UI across core design dimensions | Rendered page preferred |
+| `/design-subtract` | Remove decorative excess and generic AI patterns | Existing implementation |
+| `/design-responsive` | Find and fix layout failures across viewports | Existing implementation |
+| `/design-iterate` | Run up to three screenshot, critique, and revision cycles | Existing runnable implementation |
+
+External URLs and moodboards are never runtime dependencies. When supplied, they sharpen the target; otherwise the commands derive direction from the product, audience, content, existing design system, and the skill's bundled guidance.
 
 ---
 
